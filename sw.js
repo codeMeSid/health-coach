@@ -1,10 +1,11 @@
 /* Health Map service worker — app-shell cache for GitHub Pages */
-const CACHE = "health-map-v18";
+const CACHE = "health-map-v20";
 const PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./plan-logic.mjs",
+  "./program.mjs",
   "./recipes.mjs",
   "./stamp-lottery.mjs",
   "./stamp-packs.mjs",
@@ -41,6 +42,10 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
 
   if (url.origin === self.location.origin) {
+    if (isAppShell(req)) {
+      event.respondWith(networkFirst(req));
+      return;
+    }
     event.respondWith(staleWhileRevalidate(req));
     return;
   }
@@ -54,6 +59,28 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(cacheFirst(req));
   }
 });
+
+function isAppShell(req) {
+  const path = new URL(req.url).pathname;
+  return (
+    req.mode === "navigate" ||
+    path.endsWith(".html") ||
+    path.endsWith(".mjs") ||
+    path.endsWith(".webmanifest")
+  );
+}
+
+async function networkFirst(req) {
+  const cache = await caches.open(CACHE);
+  try {
+    const res = await fetch(req);
+    if (res.ok) cache.put(req, res.clone());
+    return res;
+  } catch {
+    const cached = await cache.match(req, { ignoreSearch: true });
+    return cached || caches.match("./offline.html");
+  }
+}
 
 async function staleWhileRevalidate(req) {
   const cache = await caches.open(CACHE);

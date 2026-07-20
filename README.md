@@ -49,4 +49,4 @@ Relative URLs throughout — works at repo root or `username.github.io` user sit
 
 - `index.html` — app
 - `health-map.html` — redirect → `./`
-- `plan-logic.mjs` / `recipes.mjs` — data
+- `plan-logic.mjs` / `recipes.mjs` / `program.mjs` — data (meals, workouts, 180-day habits)

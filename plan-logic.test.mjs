@@ -4,53 +4,67 @@ import {
   getTodayPlan,
   getRecipe,
   MEAL_DAYS,
+  WEEKEND_MEAL_DAYS,
   WORKOUT_DAYS,
+  weekdayToPlanIndex,
   exerciseVideoUrl,
   youtubeWatchUrl,
 } from "./plan-logic.mjs";
+import { getProgramWeek } from "./program.mjs";
 
 describe("getTodayPlan", () => {
-  it("maps Monday to meal[0] and workout day 1", () => {
+  it("maps Monday to Push and meal mon", () => {
     const plan = getTodayPlan(new Date(2026, 6, 13));
     assert.equal(plan.isWeekend, false);
     assert.equal(plan.meal?.key, "mon");
     assert.equal(plan.meal?.meals.length, 5);
     assert.ok(plan.meal?.meals[0].image.startsWith("https://images.unsplash.com/"));
-    assert.ok(plan.meal?.meals[0].recipeIds.length >= 1);
     assert.ok(getRecipe(plan.meal?.meals[0].recipeIds[0]));
+    assert.equal(plan.workout?.focus, "Push");
     assert.equal(plan.workout?.day, 1);
-    assert.ok(plan.workout?.exercises[0].youtubeId);
+    assert.ok(plan.habits);
+    assert.ok(plan.week >= 1);
   });
 
-  it("maps Friday to meal[4] and workout day 5", () => {
+  it("maps Friday to Full Body + Conditioning", () => {
     const plan = getTodayPlan(new Date(2026, 6, 17));
     assert.equal(plan.meal?.key, "fri");
+    assert.equal(plan.workout?.focus, "Full Body + Conditioning");
     assert.equal(plan.workout?.day, 5);
   });
 
-  it("maps Saturday to rest", () => {
+  it("maps Saturday to active recovery with weekend meals", () => {
     const plan = getTodayPlan(new Date(2026, 6, 18));
     assert.equal(plan.isWeekend, true);
     assert.equal(plan.rest, true);
-    assert.equal(plan.meal, null);
-    assert.equal(plan.workout, null);
+    assert.equal(plan.meal?.key, "sat");
+    assert.equal(plan.workout?.focus, "Active Recovery");
+    assert.ok(plan.meal?.cheatMeal);
   });
 
-  it("maps Sunday to rest", () => {
+  it("maps Sunday to rest + mobility with meal prep", () => {
     const plan = getTodayPlan(new Date(2026, 6, 19));
-    assert.equal(plan.rest, true);
+    assert.equal(plan.isWeekend, true);
+    assert.equal(plan.meal?.key, "sun");
+    assert.equal(plan.workout?.focus, "Rest + Mobility");
   });
 
-  it("keeps five meal days and five workout days", () => {
+  it("keeps five weekday meals, two weekend days, seven workouts", () => {
     assert.equal(MEAL_DAYS.length, 5);
-    assert.equal(WORKOUT_DAYS.length, 5);
+    assert.equal(WEEKEND_MEAL_DAYS.length, 2);
+    assert.equal(WORKOUT_DAYS.length, 7);
   });
 
-  it("uses boiled-egg image for boiled egg slots", () => {
-    const tue = getTodayPlan(new Date(2026, 6, 14));
-    const eggs = tue.meal?.meals.find((m) => m.dish === "Boiled Eggs");
-    assert.match(eggs?.image ?? "", /1680987398307/);
-    assert.deepEqual(eggs?.recipeIds, ["boiled-eggs"]);
+  it("weekdayToPlanIndex maps Sun to 6 and Mon to 0", () => {
+    assert.equal(weekdayToPlanIndex(0), 6);
+    assert.equal(weekdayToPlanIndex(1), 0);
+    assert.equal(weekdayToPlanIndex(6), 5);
+  });
+});
+
+describe("getProgramWeek", () => {
+  it("returns week 1 on program start", () => {
+    assert.equal(getProgramWeek(new Date(2026, 6, 21)), 1);
   });
 });
 
