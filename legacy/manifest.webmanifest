@@ -1,0 +1,68 @@
+{
+  "id": "./",
+  "name": "Health Map",
+  "short_name": "Health Map",
+  "description": "Open case: today's meals and training on the corkboard scrapbook.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#b8925c",
+  "theme_color": "#8a6b45",
+  "categories": ["health", "food", "fitness", "lifestyle"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/og-1200x630.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Health Map overview"
+    },
+    {
+      "src": "icons/splash-1080x1920.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Health Map splash"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's plan",
+      "short_name": "Today",
+      "description": "Open today's meals and workout",
+      "url": "./",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ]
+}

@@ -1,0 +1,529 @@
+/**
+ * Health Map plan data + today resolution.
+ * Weekends = rest + optional walk.
+ * Images: Unsplash (verified 200). Videos: YouTube form demos (thumbs verified 200).
+ */
+
+import { getRecipe, getRecipes } from "./recipes.mjs";
+
+export { getRecipe, getRecipes };
+
+/** @typedef {{ name: string, sets: string, youtubeId?: string, youtubeSearch?: string, tip?: string }} Exercise */
+/** @typedef {{ name: string, detail: string, youtubeId?: string, youtubeSearch?: string }} MobilityMove */
+/** @typedef {{ summary: string, tip?: string, moves: MobilityMove[] }} MobilityBlock */
+
+const WARM_UPPER = /** @type {MobilityBlock} */ ({
+  summary: "5 min · easy cardio, then open chest and shoulders",
+  tip: "Easy treadmill / bike here counts toward your 8,000–10,000 daily steps.",
+  moves: [
+    {
+      name: "Easy treadmill or bike",
+      detail: "3–5 min, nasal breathing, no sprint",
+      youtubeSearch: "easy treadmill warm up walk",
+    },
+    {
+      name: "Arm circles",
+      detail: "20 each direction · small then bigger",
+      youtubeSearch: "arm circles warm up exercise",
+    },
+    {
+      name: "Band pull-aparts",
+      detail: "2×12 · light band · squeeze shoulder blades",
+      youtubeSearch: "band pull aparts proper form",
+    },
+  ],
+});
+
+const WARM_LOWER = /** @type {MobilityBlock} */ ({
+  summary: "5 min · easy cardio, then wake up hips and legs",
+  tip: "Easy treadmill / bike here counts toward your 8,000–10,000 daily steps.",
+  moves: [
+    {
+      name: "Easy treadmill or bike",
+      detail: "3–5 min, easy pace",
+      youtubeSearch: "easy treadmill warm up walk",
+    },
+    {
+      name: "Leg swings",
+      detail: "10 each leg · front/back then side-to-side",
+      youtubeSearch: "leg swings warm up proper form",
+    },
+    {
+      name: "Bodyweight squats",
+      detail: "10 slow reps · sit back, knees track toes",
+      youtubeSearch: "bodyweight squat proper form",
+    },
+  ],
+});
+
+const WARM_CARDIO = /** @type {MobilityBlock} */ ({
+  summary: "3–5 min · ramp into today’s cardio pace",
+  moves: [
+    {
+      name: "Easy walk or easy cycle",
+      detail: "3–5 min · same machine you’ll use for the main set",
+      youtubeSearch: "incline treadmill warm up walk",
+    },
+  ],
+});
+
+const COOL_UPPER = /** @type {MobilityBlock} */ ({
+  summary: "5 min · hold each stretch 20–30 sec · no bouncing",
+  moves: [
+    {
+      name: "Doorway chest stretch",
+      detail: "Forearms on doorframe · lean through · both sides",
+      youtubeSearch: "doorway chest stretch proper form",
+    },
+    {
+      name: "Cross-body shoulder stretch",
+      detail: "Pull arm across chest · both sides",
+      youtubeSearch: "cross body shoulder stretch",
+    },
+    {
+      name: "Lat stretch (overhead)",
+      detail: "Grab upright or rack · sit hips back · both sides",
+      youtubeSearch: "lat stretch holding rack",
+    },
+  ],
+});
+
+const COOL_LOWER = /** @type {MobilityBlock} */ ({
+  summary: "5 min · hold each stretch 20–30 sec · breathe slow",
+  moves: [
+    {
+      name: "Standing quad stretch",
+      detail: "Heel to glute · tall posture · both legs",
+      youtubeSearch: "standing quad stretch proper form",
+    },
+    {
+      name: "Seated hamstring stretch",
+      detail: "Hinge at hips · soft knee · both legs",
+      youtubeSearch: "seated hamstring stretch proper form",
+    },
+    {
+      name: "Wall calf stretch",
+      detail: "Back heel down · both legs · bent + straight knee",
+      youtubeSearch: "wall calf stretch proper form",
+    },
+  ],
+});
+
+const COOL_CARDIO = /** @type {MobilityBlock} */ ({
+  summary: "5–10 min · leave the gym looser than you arrived",
+  moves: [
+    {
+      name: "Easy walk cool-down",
+      detail: "2–3 min · slow the incline / speed",
+      youtubeSearch: "treadmill cool down walk",
+    },
+    {
+      name: "Cat-cow",
+      detail: "8–10 slow cycles · move with breath",
+      youtubeSearch: "cat cow stretch proper form",
+    },
+    {
+      name: "Child’s pose + hip flexor stretch",
+      detail: "30–45 sec each · both sides for hip flexor",
+      youtubeSearch: "kneeling hip flexor stretch proper form",
+    },
+  ],
+});
+
+/** @type {Array<{ day: number, focus: string, warmUp: MobilityBlock, coolDown: MobilityBlock, note?: string, restTip?: string, exercises: Exercise[] }>} */
+export const WORKOUT_DAYS = [
+  {
+    day: 1,
+    focus: "Upper Body A",
+    warmUp: WARM_UPPER,
+    coolDown: COOL_UPPER,
+    restTip: "Rest 60–90 sec between sets.",
+    exercises: [
+      { name: "Flat Barbell or Dumbbell Bench Press", sets: "3×10-12", youtubeId: "rT7DgCr-3pg", tip: "Rest 60–90 sec between sets." },
+      { name: "Lat Pulldown", sets: "3×10-12", youtubeId: "CAwf7n6Luuc" },
+      { name: "Seated Dumbbell Shoulder Press", sets: "3×10-12", youtubeId: "qEwKCR5JCog" },
+      { name: "Seated Cable Row", sets: "3×10-12", youtubeId: "GZbfZ033f74" },
+      { name: "Triceps Rope Pushdown", sets: "2×12-15", youtubeId: "2-LAMcpzODU" },
+      { name: "Dumbbell Bicep Curl", sets: "2×12-15", youtubeId: "ykJmrZ5v0Oo" },
+      { name: "Plank", sets: "3×20-30 sec", youtubeId: "ASdvN_XEl_c" },
+    ],
+  },
+  {
+    day: 2,
+    focus: "Lower Body A",
+    warmUp: WARM_LOWER,
+    coolDown: COOL_LOWER,
+    note: "Prefer Leg Press over heavy barbell squats at current weight.",
+    restTip: "Rest 60–90 sec between sets.",
+    exercises: [
+      { name: "Leg Press", sets: "3×12-15", youtubeSearch: "leg press proper form", tip: "Rest 60–90 sec between sets." },
+      { name: "Dumbbell Romanian Deadlift", sets: "3×10-12", youtubeId: "hQgFixeXdZo" },
+      { name: "Leg Curl (machine)", sets: "3×12-15", youtubeSearch: "lying leg curl proper form" },
+      { name: "Leg Extension (machine)", sets: "2×12-15", youtubeSearch: "leg extension proper form" },
+      { name: "Standing Calf Raise", sets: "3×15", youtubeSearch: "standing calf raise proper form" },
+      { name: "Cable Crunch", sets: "3×15", youtubeSearch: "cable crunch proper form" },
+    ],
+  },
+  {
+    day: 3,
+    focus: "Cardio + Core",
+    warmUp: WARM_CARDIO,
+    coolDown: COOL_CARDIO,
+    exercises: [
+      {
+        name: "Incline Treadmill Walk or Stationary Cycling",
+        sets: "30–35 min",
+        youtubeSearch: "incline treadmill walk fat loss",
+        tip: "Every day: 8,000–10,000 steps. This block is the easiest place to hit that goal.",
+      },
+      { name: "Plank", sets: "30 sec × 2–3 rounds", youtubeId: "ASdvN_XEl_c" },
+      { name: "Bicycle Crunches", sets: "15/side × 2–3 rounds", youtubeSearch: "bicycle crunch proper form" },
+      { name: "Dead Bug", sets: "10/side × 2–3 rounds", youtubeSearch: "dead bug exercise proper form" },
+      { name: "Russian Twist", sets: "15/side × 2–3 rounds", youtubeSearch: "russian twist proper form" },
+    ],
+  },
+  {
+    day: 4,
+    focus: "Upper Body B",
+    warmUp: WARM_UPPER,
+    coolDown: COOL_UPPER,
+    restTip: "Rest 60–90 sec between sets.",
+    exercises: [
+      { name: "Incline Dumbbell Press", sets: "3×10-12", youtubeSearch: "incline dumbbell press proper form", tip: "Rest 60–90 sec between sets." },
+      { name: "Single-Arm Dumbbell Row", sets: "3×10-12/side", youtubeSearch: "single arm dumbbell row proper form" },
+      { name: "Lateral Raises", sets: "3×12-15", youtubeSearch: "dumbbell lateral raise proper form" },
+      { name: "Wide-Grip Lat Pulldown or Assisted Pull-up", sets: "3×10-12", youtubeId: "SALxEARiMkw" },
+      { name: "Dips or Close-Grip Bench Press", sets: "2×10-12", youtubeSearch: "assisted dip proper form" },
+      { name: "Hammer Curl", sets: "2×12-15", youtubeId: "ykJmrZ5v0Oo" },
+      { name: "Side Plank", sets: "2×20-30 sec/side", youtubeId: "ASdvN_XEl_c" },
+    ],
+  },
+  {
+    day: 5,
+    focus: "Lower Body B",
+    warmUp: WARM_LOWER,
+    coolDown: COOL_LOWER,
+    restTip: "Rest 60–90 sec between sets.",
+    exercises: [
+      { name: "Goblet Squat or Bulgarian Split Squat", sets: "3×10-12", youtubeSearch: "goblet squat proper form", tip: "Rest 60–90 sec between sets." },
+      { name: "Hip Thrust", sets: "3×12-15", youtubeSearch: "hip thrust proper form" },
+      { name: "Walking Lunges", sets: "2×12/leg", youtubeSearch: "walking lunges proper form", tip: "Every day: 8,000–10,000 steps. Finish leftover steps with an easy walk after this session." },
+      { name: "Seated Calf Raise", sets: "3×15", youtubeSearch: "seated calf raise proper form" },
+      { name: "Hanging Knee Raise or Mountain Climbers", sets: "3×15", youtubeSearch: "hanging knee raise proper form" },
+    ],
+  },
+];
+
+
+export const PROFILE = {
+  dailyTargetKcal: "2,000–2,050",
+  proteinWithShake: "~120g",
+  steps: "8,000–10,000",
+  shake: "1 scoop protein shake in water",
+  gerdRules: [
+    "5 smaller meals · last meal 2–3h before bed",
+    "Minimal oil · no deep-fry · light on tomato & citrus",
+    "No mint, caffeine, or carbonated drinks",
+  ],
+};
+
+const IMG = {
+  paneerMoongDosa:
+    "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=640&q=80",
+  boiledEggs:
+    "https://images.unsplash.com/photo-1680987398307-e1ae27a6ed67?w=640&q=80",
+  buttermilkMakhana:
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=640&q=80",
+  moongDalRice:
+    "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=640&q=80",
+  roastedChanaBanana:
+    "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=640&q=80",
+  paneerBhurji:
+    "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=640&q=80",
+  vegPaneerDaliya:
+    "https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=640&q=80",
+  rajmaRiceBhindi:
+    "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=640&q=80",
+  nutsFruit:
+    "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=640&q=80",
+  moongKhichdi:
+    "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=640&q=80",
+  masalaOmelette:
+    "https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?w=640&q=80",
+  choleRoti:
+    "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=640&q=80",
+  tofuPaneerStirfry:
+    "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=640&q=80",
+  sproutsChaat:
+    "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=640&q=80",
+  palakPaneer:
+    "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=640&q=80",
+  ragiIdli:
+    "https://images.unsplash.com/photo-1741376509109-e9edd6f24f5f?w=640&q=80",
+  eggCurry:
+    "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=640&q=80",
+};
+
+/**
+ * @param {string} id
+ * @returns {string}
+ */
+export function youtubeWatchUrl(id) {
+  return `https://www.youtube.com/watch?v=${id}`;
+}
+
+/**
+ * @param {string} id
+ * @returns {string}
+ */
+export function youtubeThumbUrl(id) {
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}
+
+/** @typedef {{ slot: string, dish: string, image: string, recipeIds: string[], recipeNote?: string }} MealSlot */
+
+/** @type {Array<{ key: string, label: string, calories: number, protein: number, meals: MealSlot[] }>} */
+export const MEAL_DAYS = [
+  {
+    key: "mon",
+    label: "Monday",
+    calories: 2280,
+    protein: 135,
+    meals: [
+      {
+        slot: "Breakfast",
+        dish: "Paneer-Moong Dosa + Boiled Eggs",
+        image: IMG.paneerMoongDosa,
+        recipeIds: ["paneer-moong-dosa", "boiled-eggs"],
+      },
+      {
+        slot: "Mid-morning",
+        dish: "Buttermilk + Makhana",
+        image: IMG.buttermilkMakhana,
+        recipeIds: ["buttermilk-makhana"],
+      },
+      {
+        slot: "Lunch",
+        dish: "Moong Dal, Rice & Lauki",
+        image: IMG.moongDalRice,
+        recipeIds: ["moong-dal-rice-lauki"],
+      },
+      {
+        slot: "Afternoon",
+        dish: "Roasted Chana + Banana",
+        image: IMG.roastedChanaBanana,
+        recipeIds: ["roasted-chana-banana"],
+      },
+      {
+        slot: "Dinner",
+        dish: "Paneer Bhurji + Roti",
+        image: IMG.paneerBhurji,
+        recipeIds: ["paneer-bhurji"],
+      },
+    ],
+  },
+  {
+    key: "tue",
+    label: "Tuesday",
+    calories: 1905,
+    protein: 106,
+    meals: [
+      {
+        slot: "Breakfast",
+        dish: "Veg-Paneer Daliya",
+        image: IMG.vegPaneerDaliya,
+        recipeIds: ["veg-paneer-daliya"],
+      },
+      {
+        slot: "Mid-morning",
+        dish: "Boiled Eggs",
+        image: IMG.boiledEggs,
+        recipeIds: ["boiled-eggs"],
+      },
+      {
+        slot: "Lunch",
+        dish: "Rajma, Rice & Bhindi",
+        image: IMG.rajmaRiceBhindi,
+        recipeIds: ["rajma-rice-bhindi"],
+      },
+      {
+        slot: "Afternoon",
+        dish: "Almonds + Apple",
+        image: IMG.nutsFruit,
+        recipeIds: ["nuts-fruit"],
+      },
+      {
+        slot: "Dinner",
+        dish: "Moong Khichdi + Curd",
+        image: IMG.moongKhichdi,
+        recipeIds: ["moong-khichdi"],
+      },
+    ],
+  },
+  {
+    key: "wed",
+    label: "Wednesday",
+    calories: 1850,
+    protein: 119,
+    meals: [
+      {
+        slot: "Breakfast",
+        dish: "Masala Vegetable Omelette + Toast",
+        image: IMG.masalaOmelette,
+        recipeIds: ["masala-omelette"],
+      },
+      {
+        slot: "Mid-morning",
+        dish: "Buttermilk + Makhana",
+        image: IMG.buttermilkMakhana,
+        recipeIds: ["buttermilk-makhana"],
+      },
+      {
+        slot: "Lunch",
+        dish: "Chole, Roti & Salad",
+        image: IMG.choleRoti,
+        recipeIds: ["chole-roti"],
+      },
+      {
+        slot: "Afternoon",
+        dish: "Boiled Eggs",
+        image: IMG.boiledEggs,
+        recipeIds: ["boiled-eggs"],
+      },
+      {
+        slot: "Dinner",
+        dish: "Tofu-Paneer Stir-Fry",
+        image: IMG.tofuPaneerStirfry,
+        recipeIds: ["tofu-paneer-stirfry"],
+      },
+    ],
+  },
+  {
+    key: "thu",
+    label: "Thursday",
+    calories: 2235,
+    protein: 135,
+    meals: [
+      {
+        slot: "Breakfast",
+        dish: "Paneer-Moong Dosa + Boiled Eggs",
+        image: IMG.paneerMoongDosa,
+        recipeIds: ["paneer-moong-dosa", "boiled-eggs"],
+      },
+      {
+        slot: "Mid-morning",
+        dish: "Sprouts Chaat",
+        image: IMG.sproutsChaat,
+        recipeIds: ["sprouts-chaat"],
+      },
+      {
+        slot: "Lunch",
+        dish: "Moong Dal, Rice & Mixed Veg",
+        image: IMG.moongDalRice,
+        recipeIds: ["moong-dal-rice-lauki"],
+        recipeNote: "Same as Monday — swap lauki for whatever mixed veg you have.",
+      },
+      {
+        slot: "Afternoon",
+        dish: "Roasted Chana + Banana",
+        image: IMG.roastedChanaBanana,
+        recipeIds: ["roasted-chana-banana"],
+      },
+      {
+        slot: "Dinner",
+        dish: "Palak Paneer + Roti",
+        image: IMG.palakPaneer,
+        recipeIds: ["palak-paneer"],
+      },
+    ],
+  },
+  {
+    key: "fri",
+    label: "Friday",
+    calories: 1935,
+    protein: 107,
+    meals: [
+      {
+        slot: "Breakfast",
+        dish: "Ragi/Oats Idli",
+        image: IMG.ragiIdli,
+        recipeIds: ["ragi-idli"],
+      },
+      {
+        slot: "Mid-morning",
+        dish: "Boiled Eggs",
+        image: IMG.boiledEggs,
+        recipeIds: ["boiled-eggs"],
+      },
+      {
+        slot: "Lunch",
+        dish: "Rajma, Rice & Bhindi",
+        image: IMG.rajmaRiceBhindi,
+        recipeIds: ["rajma-rice-bhindi"],
+      },
+      {
+        slot: "Afternoon",
+        dish: "Almonds + Pear",
+        image: IMG.nutsFruit,
+        recipeIds: ["nuts-fruit"],
+      },
+      {
+        slot: "Dinner",
+        dish: "Egg Curry + Rice",
+        image: IMG.eggCurry,
+        recipeIds: ["egg-curry"],
+      },
+    ],
+  },
+];
+
+/**
+ * @param {{ name: string, youtubeId?: string, youtubeSearch?: string }} exercise
+ * @returns {string}
+ */
+export function exerciseVideoUrl(exercise) {
+  if (exercise.youtubeId) return youtubeWatchUrl(exercise.youtubeId);
+  const q = exercise.youtubeSearch ?? `${exercise.name} proper form`;
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
+}
+
+/**
+ * @param {{ youtubeId?: string }} exercise
+ * @returns {string | null}
+ */
+export function exerciseThumbUrl(exercise) {
+  return exercise.youtubeId ? youtubeThumbUrl(exercise.youtubeId) : null;
+}
+
+/**
+ * @param {Date} [date]
+ */
+export function getTodayPlan(date = new Date()) {
+  const weekday = date.getDay();
+  const weekdayLabel = date.toLocaleDateString("en-IN", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
+
+  if (weekday === 0 || weekday === 6) {
+    return {
+      weekday,
+      isWeekend: true,
+      meal: null,
+      workout: null,
+      rest: true,
+      weekdayLabel,
+    };
+  }
+
+  const index = weekday - 1;
+  return {
+    weekday,
+    isWeekend: false,
+    meal: MEAL_DAYS[index] ?? null,
+    workout: WORKOUT_DAYS[index] ?? null,
+    rest: false,
+    weekdayLabel,
+  };
+}
