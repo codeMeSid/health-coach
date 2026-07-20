@@ -1,5 +1,5 @@
 /* Health Map service worker — app-shell cache for GitHub Pages */
-const CACHE = "health-map-v20";
+const CACHE = "health-map-v22";
 const PRECACHE = [
   "./",
   "./index.html",

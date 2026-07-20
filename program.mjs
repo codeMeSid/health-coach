@@ -3,10 +3,8 @@
  * Week 1 starts 2026-07-21 (Monday). Adjust PROGRAM_START if needed.
  */
 
-/** @typedef {{ label: string, detail: string }} HabitItem */
-/** @typedef {{ name: string, reps: string, videoSearch: string }} MobilityMove */
-/** @typedef {{ id: string, title: string, detail: string, why?: string, duration?: string, moves?: MobilityMove[], videoSearch?: string }} MorningStep */
-/** @typedef {{ morning: MorningStep[], water: string, steps: string, sleep: string, smoking: string, alcohol: string, checklist: string[] }} DailyHabits */
+/** @typedef {{ name: string, youtubeSearch: string }} MobilityLink */
+/** @typedef {{ morningLine: string, water: string, mobility: MobilityLink[], steps: string, smoking: string, alcohol: string }} DailyHabits */
 
 export const PROGRAM = {
   name: "180-Day Transformation",
@@ -203,93 +201,29 @@ export function getSleepPlan(week) {
  * @returns {DailyHabits}
  */
 export function getDailyHabits(weekday, week) {
-  const sleep = getSleepPlan(week);
   const smoking = getSmokingPlan(week);
   const alcohol = getAlcoholPlan(week);
   const isWeekend = weekday === 0 || weekday === 6;
   const isSunday = weekday === 0;
 
-  const morning = /** @type {MorningStep[]} */ ([
-    {
-      id: "hydrate",
-      title: "Hydrate",
-      duration: "2 min",
-      detail: "500ml water within 10 min of waking",
-      why: "You wake dehydrated after 4–7h sleep. Water before coffee reduces acidity flare-ups.",
-    },
-    {
-      id: "vitamins",
-      title: "Supplements",
-      duration: "1 min",
-      detail: "Vitamin D + B12 with breakfast",
-      why: "You're deficient in both — taking with food improves absorption vs empty stomach.",
-    },
-    {
-      id: "mobility",
-      title: "Mobility warm-up",
-      duration: "5 min",
-      detail: "Cat-cow · hip circles · shoulder rolls",
-      why: "Gentle spine and hip movement after lying down — not exercise. Eases mild lower-back stiffness before 12h at a desk.",
-      videoSearch: "5 minute morning mobility routine beginner",
-      moves: [
-        { name: "Cat-cow", reps: "8 slow breaths", videoSearch: "cat cow stretch proper form" },
-        { name: "Hip circles", reps: "10 each direction, standing", videoSearch: "standing hip circles warm up" },
-        { name: "Shoulder rolls", reps: "10 forward + 10 back", videoSearch: "shoulder rolls warm up exercise" },
-      ],
-    },
-    isWeekend
-      ? {
-          id: "weekend",
-          title: "Slow start",
-          duration: "—",
-          detail: "No alarm if possible — still hydrate before phone scroll",
-        }
-      : {
-          id: "walk",
-          title: "Light movement",
-          duration: "10 min",
-          detail: "Walk or sunlight before opening the laptop",
-          why: "Resets cortisol, hits early steps, breaks the wake→desk→coffee→smoke loop.",
-        },
-  ]);
-
-  if (isSunday) {
-    morning.push({
-      id: "prep",
-      title: "Meal prep",
-      duration: "90 min",
-      detail: "Batch-cook lunches after breakfast",
-      why: "See Handbook for grocery list — saves decision fatigue on work nights.",
-    });
-  }
-
   const waterGoal = week <= 8 ? "2.5L" : week <= 16 ? "3L" : "3–3.5L";
-
-  const checklist = [
-    "Protein shake (1 scoop water) — non-negotiable",
-    `${waterGoal} water logged`,
-    `${isWeekend ? "Active recovery or rest" : "Gym session or backup walk"}`,
-    `Smoking: ${smoking.dailyMax}/day max`,
-    isWeekend ? `Alcohol: stay within ${alcohol.weeklyMax}/week` : "Alcohol: dry day (Mon–Thu)",
-    `${sleep.hours}h sleep target`,
-    "Steps: 8,000–10,000",
-    "Last meal 2–3h before bed (acidity)",
-  ];
-
-  if (weekday === 5) {
-    checklist.push("Friday: pre-plan weekend meals — don't wing it");
-  }
+  const morningLine = isSunday
+    ? "Hydrate · D+B12 · 10-min walk · 5-min mobility · meal prep"
+    : isWeekend
+      ? "Hydrate · D+B12 · 10-min walk · 5-min mobility · slow start"
+      : "Hydrate · D+B12 · 10-min walk after waking · 5-min mobility";
 
   return {
-    morning,
-    water: `${waterGoal}/day — sip between meals, not with large meals (reduces reflux)`,
-    steps: isWeekend ? "6,000–8,000 (recovery pace)" : "8,000–10,000",
-    sleep: `Bed ~${sleep.bed} · Wake ~${sleep.wake} · ${sleep.hours}h · ${sleep.note}`,
-    smoking: `Max ${smoking.dailyMax} today · ${smoking.weeklyNote}`,
-    alcohol: isWeekend
-      ? `${alcohol.weeklyMax} drinks/week budget · ${alcohol.dailyNote}`
-      : "Dry day — save weekly budget for Fri–Sun",
-    checklist,
+    morningLine,
+    water: `${waterGoal}/day · sip between meals`,
+    mobility: [
+      { name: "Cat-cow", youtubeSearch: "cat cow stretch proper form" },
+      { name: "Hip circles", youtubeSearch: "standing hip circles warm up" },
+      { name: "Shoulder rolls", youtubeSearch: "shoulder rolls warm up exercise" },
+    ],
+    steps: isWeekend ? "6,000–8,000" : "8,000–10,000",
+    smoking: `Max ${smoking.dailyMax}`,
+    alcohol: isWeekend ? `Max ${alcohol.weeklyMax}/week` : "Dry day",
   };
 }
 

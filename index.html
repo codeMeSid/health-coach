@@ -1021,9 +1021,11 @@
   }
 
   .recipe-dialog {
-    position: relative;
+    position: fixed;
+    inset: 0;
     width: min(40rem, calc(100vw - 1.25rem));
     max-height: calc(100dvh - 1.25rem);
+    height: fit-content;
     margin: auto;
     padding: 0;
     border: var(--paper-border);
@@ -1032,13 +1034,11 @@
     color: var(--ink);
     overflow: hidden;
     box-shadow: var(--shadow-stamp);
-    clip-path: polygon(
-      0.5% 0%, 99% 0.8%, 100% 99%, 1% 100%, 0% 2%
-    );
   }
 
   .recipe-dialog::backdrop {
     background: oklch(0.2 0.03 50 / 0.55);
+    overscroll-behavior: none;
   }
 
   .recipe-dialog[open] {
@@ -1046,11 +1046,20 @@
     flex-direction: column;
   }
 
+  html:has(.recipe-dialog[open]) {
+    overflow: hidden;
+  }
+
+  body.is-modal-open {
+    overflow: hidden;
+    touch-action: none;
+  }
+
   .recipe-dialog__close {
     position: absolute;
     top: var(--space-3);
     right: var(--space-3);
-    z-index: 2;
+    z-index: 20;
     width: 2.75rem;
     height: 2.75rem;
     border: 2px solid var(--primary-ink);
@@ -1068,27 +1077,32 @@
     outline-offset: 3px;
   }
 
-  .recipe-dialog__scroll {
-    overflow: auto;
-    overscroll-behavior: contain;
+  /* One scroll surface — swipe anywhere in sheet moves content; × stays above. */
+  .recipe-dialog__mount {
     flex: 1;
     min-height: 0;
+    max-height: calc(100dvh - 1.25rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .recipe-dialog__sticky {
-    position: sticky;
-    top: 0;
-    z-index: 2;
+  .recipe-dialog__inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .recipe-dialog__chrome {
+    flex-shrink: 0;
     background: var(--surface-solid);
     border-bottom: 2px dashed var(--crease-soft);
-    box-shadow: 0 4px 12px oklch(0.3 0.03 50 / 0.08);
   }
 
-  .recipe-dialog__sticky .recipe-hero {
-    aspect-ratio: 16 / 7;
+  .recipe-dialog__chrome .recipe-hero {
+    aspect-ratio: 16 / 9;
   }
 
-  .recipe-dialog__sticky .recipe-stats {
+  .recipe-dialog__chrome .recipe-stats {
     margin: 0;
     padding: var(--space-3) var(--space-4);
     background: var(--surface-raised);
@@ -1399,16 +1413,20 @@
     font-style: italic;
   }
 
+  .brief-line {
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
   .habit-grid {
     display: grid;
     gap: var(--space-3);
-    margin-top: var(--space-3);
-  }
-
-  @media (min-width: 380px) {
-    .habit-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .habit-row {
@@ -1421,223 +1439,9 @@
   }
 
   .habit-row--water { --habit-accent: oklch(0.55 0.12 230); }
-  .habit-row--sleep { --habit-accent: oklch(0.45 0.08 280); }
+  .habit-row--mobility { --habit-accent: oklch(0.45 0.08 280); }
   .habit-row--smoking { --habit-accent: oklch(0.5 0.1 25); }
   .habit-row--alcohol { --habit-accent: oklch(0.55 0.1 145); }
-
-  .routine {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: var(--space-2);
-  }
-
-  .routine-step {
-    display: grid;
-    grid-template-columns: 2.75rem 1fr;
-    gap: var(--space-3);
-    align-items: start;
-    padding: var(--space-3);
-    border: var(--paper-border);
-    border-radius: 0.15rem;
-    background: var(--surface-raised);
-    box-shadow: var(--shadow-stamp-sm);
-    min-height: 2.75rem;
-  }
-
-  .routine-step__badge {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 2px solid var(--stamp-ink);
-    border-radius: 0.2rem;
-    background: var(--surface-solid);
-    color: var(--stamp-ink);
-    box-shadow: var(--shadow-stamp-sm);
-  }
-
-  .routine-step__badge svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .routine-step__head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-2);
-    margin-bottom: 0.2rem;
-  }
-
-  .routine-step__title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.0625rem;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  .routine-step__duration {
-    margin: 0;
-    padding: 0.1rem 0.45rem;
-    border: 1px solid var(--crease);
-    border-radius: var(--radius-pill);
-    font-size: 0.6875rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--accent-ink);
-    background: var(--accent-soft);
-  }
-
-  .routine-step__detail {
-    margin: 0;
-    font-size: 0.9375rem;
-    line-height: 1.4;
-    color: var(--ink);
-  }
-
-  .routine-step__why {
-    margin: var(--space-2) 0 0;
-    font-family: var(--font-display);
-    font-size: 0.875rem;
-    font-style: italic;
-    line-height: 1.4;
-    color: var(--muted);
-  }
-
-  .routine-step__expand {
-    margin-top: var(--space-2);
-    border: 1px dashed var(--crease);
-    border-radius: 0.15rem;
-    background: var(--surface-solid);
-  }
-
-  .routine-step__expand summary {
-    padding: 0.55rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--primary);
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .routine-step__expand summary::-webkit-details-marker { display: none; }
-
-  .routine-step__expand summary::after {
-    content: " +";
-    color: var(--accent);
-  }
-
-  .routine-step__expand[open] summary::after { content: " −"; }
-
-  .routine-moves {
-    list-style: none;
-    margin: 0;
-    padding: 0 var(--space-3) var(--space-3);
-    display: grid;
-    gap: var(--space-2);
-  }
-
-  .routine-move {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: var(--space-2);
-    align-items: center;
-    padding-top: var(--space-2);
-    border-top: 1px solid var(--crease-soft);
-  }
-
-  .routine-move__name {
-    margin: 0;
-    font-weight: 700;
-    font-size: 0.9375rem;
-  }
-
-  .routine-move__reps {
-    margin: 0.15rem 0 0;
-    font-size: 0.8125rem;
-    color: var(--muted);
-  }
-
-  .routine-move__link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.75rem;
-    padding: 0.45rem 0.65rem;
-    border: 2px solid var(--stamp-ink);
-    border-radius: 0.2rem;
-    background: var(--surface-raised);
-    color: var(--stamp-ink);
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    text-decoration: none;
-    white-space: nowrap;
-    box-shadow: var(--shadow-stamp-sm);
-  }
-
-  .routine-move__link:hover {
-    background: var(--primary);
-    color: var(--primary-ink);
-  }
-
-  .checklist {
-    list-style: none;
-    margin: var(--space-3) 0 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-2);
-  }
-
-  .checklist__item {
-    display: grid;
-    grid-template-columns: 1.35rem 1fr;
-    gap: var(--space-3);
-    align-items: start;
-    min-height: 2.75rem;
-    padding: 0.35rem 0;
-    cursor: pointer;
-  }
-
-  .checklist__item input {
-    width: 1.15rem;
-    height: 1.15rem;
-    margin: 0.2rem 0 0;
-    accent-color: var(--stamp-ink);
-    cursor: pointer;
-  }
-
-  .checklist__label {
-    font-size: 0.9375rem;
-    line-height: 1.4;
-    cursor: pointer;
-  }
-
-  .checklist__item.is-done .checklist__label {
-    opacity: 0.55;
-    text-decoration: line-through;
-    text-decoration-color: var(--accent);
-  }
-
-  .habit-row {
-    padding: var(--space-3);
-    border: var(--paper-border);
-    border-radius: 0.15rem;
-    background: var(--surface-raised);
-    box-shadow: var(--shadow-stamp-sm);
-  }
 
   .habit-row__label {
     margin: 0 0 0.25rem;
@@ -1653,7 +1457,41 @@
     font-family: var(--font-display);
     font-size: 1rem;
     font-style: italic;
-    line-height: 1.4;
+    line-height: 1.35;
+  }
+
+  .habit-row__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.45rem;
+    margin: 0;
+  }
+
+  .habit-row__link {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+  }
+
+  .habit-row__link:hover {
+    color: var(--accent-ink);
+  }
+
+  .habit-row__link:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .habit-row__sep {
+    color: var(--muted);
+    font-style: normal;
+    user-select: none;
   }
 
   .visually-hidden {
@@ -1851,7 +1689,7 @@
 
   <dialog class="recipe-dialog" id="recipe-dialog" aria-labelledby="recipe-dialog-title">
     <button type="button" class="recipe-dialog__close" id="recipe-dialog-close" aria-label="Close recipe">×</button>
-    <div class="recipe-dialog__scroll" id="recipe-dialog-body"></div>
+    <div class="recipe-dialog__mount" id="recipe-dialog-body"></div>
   </dialog>
 
   <script type="module">
@@ -1944,7 +1782,7 @@
 
     function observeReveals(root) {
       if (revealObserver) revealObserver.disconnect();
-      const nodes = root.querySelectorAll(".cue, .note, .gerd-list, .exercise-card, .routine-step");
+      const nodes = root.querySelectorAll(".cue, .note, .gerd-list, .exercise-card, .habit-row");
       if (reducedMotion || !animate) {
         nodes.forEach((n) => n.classList.add("is-in"));
         return;
@@ -2018,106 +1856,29 @@
       });
     }
 
-    function routineIcon(id) {
-      const icons = {
-        hydrate: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c3 4.5 5 7.5 5 10.5a5 5 0 1 1-10 0c0-3 2-6 5-10.5z"/></svg>`,
-        vitamins: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="10" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>`,
-        mobility: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M12 7v4M9 21l3-6 3 6M8 11h8"/></svg>`,
-        walk: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13" cy="4" r="2"/><path d="M8 21l2-7 3 1 2-6 3 2"/></svg>`,
-        weekend: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16M4 11v8h16v-8M8 11V7h8v4"/></svg>`,
-        prep: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v16H7z"/><path d="M9 8h6M9 12h6"/></svg>`,
-      };
-      return icons[id] ?? icons.walk;
-    }
-
-    function renderMorningStep(step, index) {
-      const moves = step.moves?.length
-        ? `<details class="routine-step__expand">
-            <summary>How to do it</summary>
-            <ul class="routine-moves">
-              ${step.moves.map((move) => {
-                const href = `https://www.youtube.com/results?search_query=${encodeURIComponent(move.videoSearch)}`;
-                return `<li class="routine-move">
-                  <div>
-                    <p class="routine-move__name">${escapeHtml(move.name)}</p>
-                    <p class="routine-move__reps">${escapeHtml(move.reps)}</p>
-                  </div>
-                  <a class="routine-move__link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">Demo</a>
-                </li>`;
-              }).join("")}
-            </ul>
-            ${step.videoSearch ? `<p class="routine-step__why" style="padding:0 var(--space-3) var(--space-3)"><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(step.videoSearch)}" target="_blank" rel="noopener noreferrer">Full 5-min follow-along</a></p>` : ""}
-          </details>`
-        : "";
-      return `<li class="routine-step">
-        <div class="routine-step__badge" aria-hidden="true">${routineIcon(step.id)}</div>
-        <div>
-          <div class="routine-step__head">
-            <h3 class="routine-step__title">${escapeHtml(step.title)}</h3>
-            ${step.duration ? `<p class="routine-step__duration">${escapeHtml(step.duration)}</p>` : ""}
-          </div>
-          <p class="routine-step__detail">${escapeHtml(step.detail)}</p>
-          ${step.why ? `<p class="routine-step__why">${escapeHtml(step.why)}</p>` : ""}
-          ${moves}
-        </div>
-      </li>`;
-    }
-
-    function checklistKey(date, index) {
-      const d = date.toISOString().slice(0, 10);
-      return `hm-check-${d}-${index}`;
-    }
-
-    function bindChecklist(root, date) {
-      root.querySelectorAll(".checklist__item").forEach((item) => {
-        const input = item.querySelector("input");
-        const index = Number(input?.dataset.checkIndex);
-        if (!input || Number.isNaN(index)) return;
-        const key = checklistKey(date, index);
-        const saved = localStorage.getItem(key) === "1";
-        input.checked = saved;
-        item.classList.toggle("is-done", saved);
-        const sync = () => {
-          item.classList.toggle("is-done", input.checked);
-          localStorage.setItem(key, input.checked ? "1" : "0");
-        };
-        input.addEventListener("change", sync);
-        item.addEventListener("click", (event) => {
-          if (event.target === input) return;
-          input.checked = !input.checked;
-          sync();
-        });
-      });
-    }
-
-    function renderHabitsPlane(plan, date) {
+    function renderHabitsPlane(plan) {
       const h = plan.habits;
-      const morning = h.morning.map((step, i) => renderMorningStep(step, i)).join("");
-      const checklist = h.checklist.map((line, i) => `
-        <li class="checklist__item">
-          <input type="checkbox" id="check-${i}" data-check-index="${i}" aria-label="${escapeHtml(line)}"/>
-          <label class="checklist__label" for="check-${i}">${escapeHtml(line)}</label>
-        </li>
-      `).join("");
+      const mobilityLinks = h.mobility.map((move, i) => {
+        const href = `https://www.youtube.com/results?search_query=${encodeURIComponent(move.youtubeSearch)}`;
+        const sep = i < h.mobility.length - 1 ? `<span class="habit-row__sep" aria-hidden="true">·</span>` : "";
+        return `<a class="habit-row__link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(move.name)}</a>${sep}`;
+      }).join("");
+
       return `
         <section class="plane" aria-labelledby="habits-title">
           <div class="plane__head">
-            <h2 class="plane__title" id="habits-title">Daily brief</h2>
+            <h2 class="plane__title" id="habits-title">Today</h2>
             <p class="plane__hint">Week ${plan.week} · ${escapeHtml(plan.phase.phase)}</p>
           </div>
-          <div class="cue">
-            <p class="cue__label">Morning routine</p>
-            <p class="cue__body">${h.morning.length} steps before the day starts — ~15 min on weekdays.</p>
-            <ol class="routine" aria-label="Morning routine steps">${morning}</ol>
-          </div>
-          <div class="habit-grid">
+          <p class="brief-line">${escapeHtml(h.morningLine)}</p>
+          <div class="habit-grid" aria-label="Daily targets">
             <div class="habit-row habit-row--water">
               <p class="habit-row__label">Water</p>
               <p class="habit-row__body">${escapeHtml(h.water)}</p>
             </div>
-            <div class="habit-row habit-row--sleep">
-              <p class="habit-row__label">Sleep</p>
-              <p class="habit-row__body">${escapeHtml(h.sleep)}</p>
+            <div class="habit-row habit-row--mobility">
+              <p class="habit-row__label">Mobility</p>
+              <p class="habit-row__links">${mobilityLinks}</p>
             </div>
             <div class="habit-row habit-row--smoking">
               <p class="habit-row__label">Smoking</p>
@@ -2128,8 +1889,6 @@
               <p class="habit-row__body">${escapeHtml(h.alcohol)}</p>
             </div>
           </div>
-          <p class="cue__label" style="margin-top: var(--space-4)">Daily checklist</p>
-          <ul class="checklist">${checklist}</ul>
         </section>
       `;
     }
@@ -2222,60 +1981,62 @@
       `).join("");
 
       return `
-        <div class="recipe-dialog__sticky">
-          <div class="recipe-hero">
-            <img class="recipe-hero__img" src="${escapeHtml(recipe.image)}" alt="${escapeHtml(recipe.title)}" width="800" height="500"/>
-            <div class="recipe-hero__fade" aria-hidden="true"></div>
-            <div class="recipe-hero__caption">
-              <p class="recipe-hero__slot">${escapeHtml(meal.slot)}</p>
-              <h2 class="recipe-hero__title" id="recipe-dialog-title">${escapeHtml(multi ? recipe.title : meal.dish)}</h2>
+        <div class="recipe-dialog__inner">
+          <header class="recipe-dialog__chrome">
+            <div class="recipe-hero">
+              <img class="recipe-hero__img" src="${escapeHtml(recipe.image)}" alt="${escapeHtml(recipe.title)}" width="800" height="500"/>
+              <div class="recipe-hero__fade" aria-hidden="true"></div>
+              <div class="recipe-hero__caption">
+                <p class="recipe-hero__slot">${escapeHtml(meal.slot)}</p>
+                <h2 class="recipe-hero__title" id="recipe-dialog-title">${escapeHtml(multi ? recipe.title : meal.dish)}</h2>
+              </div>
             </div>
+            <div class="recipe-stats" aria-label="Recipe overview">
+              <div class="recipe-stat">
+                <span class="recipe-stat__value">${recipe.serves}</span>
+                <span class="recipe-stat__label">Serves</span>
+              </div>
+              <div class="recipe-stat">
+                <span class="recipe-stat__value">${recipe.minutes}</span>
+                <span class="recipe-stat__label">Minutes</span>
+              </div>
+              <div class="recipe-stat">
+                <span class="recipe-stat__value recipe-stat__value--accent">${recipe.calories}</span>
+                <span class="recipe-stat__label">kcal</span>
+              </div>
+              <div class="recipe-stat">
+                <span class="recipe-stat__value">${formatNum(recipe.protein)}g</span>
+                <span class="recipe-stat__label">Protein</span>
+              </div>
+            </div>
+          </header>
+          <div class="recipe-dialog__body">
+            ${meal.recipeNote ? `<p class="recipe-note">${escapeHtml(meal.recipeNote)}</p>` : ""}
+            ${switcher}
+            <div class="recipe-macros" aria-label="Macros">
+              <div class="recipe-macro">
+                <span class="recipe-macro__label">Protein</span>
+                <span class="recipe-macro__value">${formatNum(recipe.protein)}g</span>
+              </div>
+              <div class="recipe-macro">
+                <span class="recipe-macro__label">Carbs</span>
+                <span class="recipe-macro__value">${formatNum(recipe.carbs)}g</span>
+              </div>
+              <div class="recipe-macro">
+                <span class="recipe-macro__label">Fat</span>
+                <span class="recipe-macro__value">${formatNum(recipe.fat)}g</span>
+              </div>
+            </div>
+            <section aria-labelledby="ingredients-title">
+              <h3 class="recipe-section__title" id="ingredients-title">Ingredients</h3>
+              <ul class="recipe-ingredients">${ingredients}</ul>
+            </section>
+            <section aria-labelledby="method-title">
+              <h3 class="recipe-section__title" id="method-title">Method</h3>
+              <ol class="recipe-steps">${steps}</ol>
+            </section>
+            ${recipe.tip ? `<p class="recipe-tip"><span class="recipe-tip__label">Cook tip</span>${escapeHtml(recipe.tip)}</p>` : ""}
           </div>
-          <div class="recipe-stats" aria-label="Recipe overview">
-            <div class="recipe-stat">
-              <span class="recipe-stat__value">${recipe.serves}</span>
-              <span class="recipe-stat__label">Serves</span>
-            </div>
-            <div class="recipe-stat">
-              <span class="recipe-stat__value">${recipe.minutes}</span>
-              <span class="recipe-stat__label">Minutes</span>
-            </div>
-            <div class="recipe-stat">
-              <span class="recipe-stat__value recipe-stat__value--accent">${recipe.calories}</span>
-              <span class="recipe-stat__label">kcal</span>
-            </div>
-            <div class="recipe-stat">
-              <span class="recipe-stat__value">${formatNum(recipe.protein)}g</span>
-              <span class="recipe-stat__label">Protein</span>
-            </div>
-          </div>
-        </div>
-        <div class="recipe-dialog__body">
-          ${meal.recipeNote ? `<p class="recipe-note">${escapeHtml(meal.recipeNote)}</p>` : ""}
-          ${switcher}
-          <div class="recipe-macros" aria-label="Macros">
-            <div class="recipe-macro">
-              <span class="recipe-macro__label">Protein</span>
-              <span class="recipe-macro__value">${formatNum(recipe.protein)}g</span>
-            </div>
-            <div class="recipe-macro">
-              <span class="recipe-macro__label">Carbs</span>
-              <span class="recipe-macro__value">${formatNum(recipe.carbs)}g</span>
-            </div>
-            <div class="recipe-macro">
-              <span class="recipe-macro__label">Fat</span>
-              <span class="recipe-macro__value">${formatNum(recipe.fat)}g</span>
-            </div>
-          </div>
-          <section aria-labelledby="ingredients-title">
-            <h3 class="recipe-section__title" id="ingredients-title">Ingredients</h3>
-            <ul class="recipe-ingredients">${ingredients}</ul>
-          </section>
-          <section aria-labelledby="method-title">
-            <h3 class="recipe-section__title" id="method-title">Method</h3>
-            <ol class="recipe-steps">${steps}</ol>
-          </section>
-          ${recipe.tip ? `<p class="recipe-tip"><span class="recipe-tip__label">Cook tip</span>${escapeHtml(recipe.tip)}</p>` : ""}
         </div>
       `;
     }
@@ -2295,6 +2056,7 @@
       if (!recipeSession) return;
       const { meal, recipes, activeIndex } = recipeSession;
       recipeDialogBody.innerHTML = renderRecipeSheet(meal, recipes, activeIndex);
+      recipeDialogBody.scrollTop = 0;
       bindRecipeSwitcher();
 
       if (!reducedMotion && animate) {
@@ -2313,6 +2075,24 @@
       }
     }
 
+    let modalScrollY = 0;
+
+    function lockPageScroll() {
+      modalScrollY = window.scrollY;
+      document.body.classList.add("is-modal-open");
+      document.body.style.top = `-${modalScrollY}px`;
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+    }
+
+    function unlockPageScroll() {
+      document.body.classList.remove("is-modal-open");
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      window.scrollTo(0, modalScrollY);
+    }
+
     function openRecipeModal(meal) {
       const recipes = getRecipes(meal.recipeIds);
       if (!recipes.length) return;
@@ -2323,13 +2103,23 @@
       if (typeof recipeDialog.showModal === "function") {
         recipeDialog.showModal();
       }
+      lockPageScroll();
 
+      // Animate inner sheet only — transform on <dialog> fights position:fixed.
       if (!reducedMotion && animate) {
-        animate(recipeDialog, { opacity: [0, 1], y: [24, 0], scale: [0.97, 1] }, {
-          duration: 0.3,
-          easing: EASE,
-        });
+        const sheet = recipeDialogBody.querySelector(".recipe-dialog__inner");
+        if (sheet) {
+          animate(sheet, { opacity: [0, 1], y: [24, 0], scale: [0.97, 1] }, {
+            duration: 0.3,
+            easing: EASE,
+          });
+        }
       }
+    }
+
+    function closeRecipeModal() {
+      if (!recipeDialog.open) return;
+      recipeDialog.close();
     }
 
     function bindMealCards() {
@@ -2425,7 +2215,7 @@
         : `${workout.exercises.length} suspects`;
 
       root.innerHTML = `
-        ${renderHabitsPlane(plan, dateForJsDay(selectedJsDay))}
+        ${renderHabitsPlane(plan)}
         <section class="plane" aria-labelledby="meals-title">
           <div class="plane__head">
             <h2 class="plane__title" id="meals-title">${escapeHtml(meal.label)} plate</h2>
@@ -2462,7 +2252,6 @@
       `;
 
       bindMealCards();
-      bindChecklist(root, dateForJsDay(selectedJsDay));
     }
 
     function animatePlanes(root) {
@@ -2503,15 +2292,20 @@
     }
 
     document.getElementById("recipe-dialog-close").addEventListener("click", () => {
-      recipeDialog.close();
+      closeRecipeModal();
     });
 
     recipeDialog.addEventListener("click", (event) => {
-      if (event.target === recipeDialog) recipeDialog.close();
+      if (event.target === recipeDialog) closeRecipeModal();
+    });
+
+    recipeDialog.addEventListener("close", () => {
+      unlockPageScroll();
+      recipeSession = null;
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && recipeDialog.open) recipeDialog.close();
+      if (event.key === "Escape" && recipeDialog.open) closeRecipeModal();
     });
 
     function playEntrance() {
@@ -2589,7 +2383,7 @@
 
     async function migrateServiceWorkers() {
       if (!("serviceWorker" in navigator)) return;
-      const migrated = sessionStorage.getItem("hm-sw-v20");
+      const migrated = sessionStorage.getItem("hm-sw-v22");
       if (migrated) return;
       const regs = await navigator.serviceWorker.getRegistrations();
       await Promise.all(regs.map((reg) => reg.unregister()));
@@ -2597,7 +2391,7 @@
         const keys = await caches.keys();
         await Promise.all(keys.filter((k) => k.startsWith("health-map")).map((k) => caches.delete(k)));
       }
-      sessionStorage.setItem("hm-sw-v20", "1");
+      sessionStorage.setItem("hm-sw-v22", "1");
     }
 
     migrateServiceWorkers().finally(() => {
