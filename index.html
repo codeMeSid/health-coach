@@ -16,34 +16,33 @@
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Health Map"/>
 <meta property="og:description" content="Open case: today's meals and training on the corkboard."/>
-<meta property="og:image" content="legacy/icons/og-1200x630.png"/>
+<meta property="og:image" content="icons/og-1200x630.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Health Map"/>
 <meta name="twitter:description" content="Open case: today's meals and training on the corkboard."/>
-<meta name="twitter:image" content="legacy/icons/og-1200x630.png"/>
+<meta name="twitter:image" content="icons/og-1200x630.png"/>
 
-<link rel="manifest" href="legacy/manifest.webmanifest"/>
-<link rel="icon" href="legacy/icons/favicon.ico" sizes="any"/>
-<link rel="icon" type="image/png" sizes="32x32" href="legacy/icons/icon-32.png"/>
-<link rel="icon" type="image/png" sizes="16x16" href="legacy/icons/icon-16.png"/>
-<link rel="apple-touch-icon" href="legacy/icons/apple-touch-icon.png"/>
-<link rel="mask-icon" href="legacy/icons/icon-512.png" color="#2d586e"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<link rel="icon" href="icons/favicon.ico" sizes="any"/>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png"/>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<link rel="mask-icon" href="icons/icon-512.png" color="#2d586e"/>
 
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)"/>
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)"/>
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)"/>
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)"/>
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"/>
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"/>
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"/>
-<link rel="apple-touch-startup-image" href="legacy/icons/splash-1080x1920.png" media="(device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"/>
+<link rel="apple-touch-startup-image" href="icons/splash-1080x1920.png" media="(device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3)"/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://esm.sh" crossorigin/>
 <link rel="dns-prefetch" href="https://images.unsplash.com"/>
 <link rel="dns-prefetch" href="https://i.ytimg.com"/>
-<link rel="preload" as="image" href="legacy/icons/icon-192.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Cinzel:wght@600;700&family=Comfortaa:wght@500;700&family=Fredoka:wght@500;700&family=Limelight&family=Newsreader:opsz,wght@6..72,500;6..72,700;6..72,800&family=Oswald:wght@500;700&family=Permanent+Marker&family=Press+Start+2P&family=Russo+One&family=Share+Tech+Mono&family=Source+Sans+3:wght@400;600;700&family=VT323&family=Zen+Kurenaido&display=swap" rel="stylesheet"/>
 <style>
   :root {
@@ -1072,6 +1071,33 @@
   .recipe-dialog__scroll {
     overflow: auto;
     overscroll-behavior: contain;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .recipe-dialog__sticky {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--surface-solid);
+    border-bottom: 2px dashed var(--crease-soft);
+    box-shadow: 0 4px 12px oklch(0.3 0.03 50 / 0.08);
+  }
+
+  .recipe-dialog__sticky .recipe-hero {
+    aspect-ratio: 16 / 7;
+  }
+
+  .recipe-dialog__sticky .recipe-stats {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-raised);
+  }
+
+  .recipe-dialog__body {
+    padding: var(--space-4) var(--space-4) var(--space-6);
+    display: grid;
+    gap: var(--space-5);
   }
 
   .recipe-hero {
@@ -1373,6 +1399,263 @@
     font-style: italic;
   }
 
+  .habit-grid {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 380px) {
+    .habit-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .habit-row {
+    padding: var(--space-3);
+    border: var(--paper-border);
+    border-radius: 0.15rem;
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-stamp-sm);
+    border-left: 3px solid var(--habit-accent, var(--accent));
+  }
+
+  .habit-row--water { --habit-accent: oklch(0.55 0.12 230); }
+  .habit-row--sleep { --habit-accent: oklch(0.45 0.08 280); }
+  .habit-row--smoking { --habit-accent: oklch(0.5 0.1 25); }
+  .habit-row--alcohol { --habit-accent: oklch(0.55 0.1 145); }
+
+  .routine {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .routine-step {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    padding: var(--space-3);
+    border: var(--paper-border);
+    border-radius: 0.15rem;
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-stamp-sm);
+    min-height: 2.75rem;
+  }
+
+  .routine-step__badge {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 2px solid var(--stamp-ink);
+    border-radius: 0.2rem;
+    background: var(--surface-solid);
+    color: var(--stamp-ink);
+    box-shadow: var(--shadow-stamp-sm);
+  }
+
+  .routine-step__badge svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .routine-step__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-bottom: 0.2rem;
+  }
+
+  .routine-step__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .routine-step__duration {
+    margin: 0;
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--crease);
+    border-radius: var(--radius-pill);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+  }
+
+  .routine-step__detail {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .routine-step__why {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  .routine-step__expand {
+    margin-top: var(--space-2);
+    border: 1px dashed var(--crease);
+    border-radius: 0.15rem;
+    background: var(--surface-solid);
+  }
+
+  .routine-step__expand summary {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--primary);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .routine-step__expand summary::-webkit-details-marker { display: none; }
+
+  .routine-step__expand summary::after {
+    content: " +";
+    color: var(--accent);
+  }
+
+  .routine-step__expand[open] summary::after { content: " −"; }
+
+  .routine-moves {
+    list-style: none;
+    margin: 0;
+    padding: 0 var(--space-3) var(--space-3);
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .routine-move {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-2);
+    align-items: center;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--crease-soft);
+  }
+
+  .routine-move__name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .routine-move__reps {
+    margin: 0.15rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .routine-move__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.45rem 0.65rem;
+    border: 2px solid var(--stamp-ink);
+    border-radius: 0.2rem;
+    background: var(--surface-raised);
+    color: var(--stamp-ink);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: var(--shadow-stamp-sm);
+  }
+
+  .routine-move__link:hover {
+    background: var(--primary);
+    color: var(--primary-ink);
+  }
+
+  .checklist {
+    list-style: none;
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .checklist__item {
+    display: grid;
+    grid-template-columns: 1.35rem 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    min-height: 2.75rem;
+    padding: 0.35rem 0;
+    cursor: pointer;
+  }
+
+  .checklist__item input {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0.2rem 0 0;
+    accent-color: var(--stamp-ink);
+    cursor: pointer;
+  }
+
+  .checklist__label {
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    cursor: pointer;
+  }
+
+  .checklist__item.is-done .checklist__label {
+    opacity: 0.55;
+    text-decoration: line-through;
+    text-decoration-color: var(--accent);
+  }
+
+  .habit-row {
+    padding: var(--space-3);
+    border: var(--paper-border);
+    border-radius: 0.15rem;
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-stamp-sm);
+  }
+
+  .habit-row__label {
+    margin: 0 0 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  .habit-row__body {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
   .visually-hidden {
     position: absolute;
     width: 1px;
@@ -1578,7 +1861,8 @@
       exerciseVideoUrl,
       exerciseThumbUrl,
       PROFILE,
-    } from "legacy/plan-logic.mjs";
+    } from "./plan-logic.mjs";
+    import { PROGRAM } from "./program.mjs";
     import {
       applyStampPack,
       caseNumber,
@@ -1586,7 +1870,7 @@
       persistStampPack,
       resolveStampPack,
       rerollPack,
-    } from "legacy/stamp-lottery.mjs";
+    } from "./stamp-lottery.mjs";
 
     const motionMod = import("https://esm.sh/motion@11.15.0");
 
@@ -1660,7 +1944,7 @@
 
     function observeReveals(root) {
       if (revealObserver) revealObserver.disconnect();
-      const nodes = root.querySelectorAll(".cue, .note, .gerd-list, .exercise-card");
+      const nodes = root.querySelectorAll(".cue, .note, .gerd-list, .exercise-card, .routine-step");
       if (reducedMotion || !animate) {
         nodes.forEach((n) => n.classList.add("is-in"));
         return;
@@ -1708,13 +1992,16 @@
 
     function renderContextStrip(plan) {
       const root = document.getElementById("context-strip");
-      const chips = plan.rest
+      const weekChip = `<span class="chip chip--accent">Week ${plan.week}/${PROGRAM.weeks} · ${escapeHtml(plan.phase.phase)}</span>`;
+      const chips = plan.isWeekend
         ? [
-            `<span class="chip chip--accent">No leads · weekend</span>`,
-            `<span class="chip">${escapeHtml(PROFILE.dailyTargetKcal)} kcal target</span>`,
-            `<span class="chip">${escapeHtml(PROFILE.steps)} steps</span>`,
+            weekChip,
+            `<span class="chip">Recovery · cheat meal planned</span>`,
+            `<span class="chip">${escapeHtml(PROFILE.dailyTargetKcal)} kcal</span>`,
+            `<span class="chip">${escapeHtml(plan.habits.steps)} steps</span>`,
           ]
         : [
+            weekChip,
             `<span class="chip chip--accent">${escapeHtml(PROFILE.dailyTargetKcal)} kcal · ${escapeHtml(PROFILE.proteinWithShake)} protein</span>`,
             `<span class="chip">${escapeHtml(PROFILE.shake)}</span>`,
             `<span class="chip">${escapeHtml(PROFILE.steps)} steps</span>`,
@@ -1729,6 +2016,122 @@
         duration: 0.28,
         easing: EASE,
       });
+    }
+
+    function routineIcon(id) {
+      const icons = {
+        hydrate: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c3 4.5 5 7.5 5 10.5a5 5 0 1 1-10 0c0-3 2-6 5-10.5z"/></svg>`,
+        vitamins: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="10" rx="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg>`,
+        mobility: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M12 7v4M9 21l3-6 3 6M8 11h8"/></svg>`,
+        walk: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13" cy="4" r="2"/><path d="M8 21l2-7 3 1 2-6 3 2"/></svg>`,
+        weekend: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16M4 11v8h16v-8M8 11V7h8v4"/></svg>`,
+        prep: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v16H7z"/><path d="M9 8h6M9 12h6"/></svg>`,
+      };
+      return icons[id] ?? icons.walk;
+    }
+
+    function renderMorningStep(step, index) {
+      const moves = step.moves?.length
+        ? `<details class="routine-step__expand">
+            <summary>How to do it</summary>
+            <ul class="routine-moves">
+              ${step.moves.map((move) => {
+                const href = `https://www.youtube.com/results?search_query=${encodeURIComponent(move.videoSearch)}`;
+                return `<li class="routine-move">
+                  <div>
+                    <p class="routine-move__name">${escapeHtml(move.name)}</p>
+                    <p class="routine-move__reps">${escapeHtml(move.reps)}</p>
+                  </div>
+                  <a class="routine-move__link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">Demo</a>
+                </li>`;
+              }).join("")}
+            </ul>
+            ${step.videoSearch ? `<p class="routine-step__why" style="padding:0 var(--space-3) var(--space-3)"><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(step.videoSearch)}" target="_blank" rel="noopener noreferrer">Full 5-min follow-along</a></p>` : ""}
+          </details>`
+        : "";
+      return `<li class="routine-step">
+        <div class="routine-step__badge" aria-hidden="true">${routineIcon(step.id)}</div>
+        <div>
+          <div class="routine-step__head">
+            <h3 class="routine-step__title">${escapeHtml(step.title)}</h3>
+            ${step.duration ? `<p class="routine-step__duration">${escapeHtml(step.duration)}</p>` : ""}
+          </div>
+          <p class="routine-step__detail">${escapeHtml(step.detail)}</p>
+          ${step.why ? `<p class="routine-step__why">${escapeHtml(step.why)}</p>` : ""}
+          ${moves}
+        </div>
+      </li>`;
+    }
+
+    function checklistKey(date, index) {
+      const d = date.toISOString().slice(0, 10);
+      return `hm-check-${d}-${index}`;
+    }
+
+    function bindChecklist(root, date) {
+      root.querySelectorAll(".checklist__item").forEach((item) => {
+        const input = item.querySelector("input");
+        const index = Number(input?.dataset.checkIndex);
+        if (!input || Number.isNaN(index)) return;
+        const key = checklistKey(date, index);
+        const saved = localStorage.getItem(key) === "1";
+        input.checked = saved;
+        item.classList.toggle("is-done", saved);
+        const sync = () => {
+          item.classList.toggle("is-done", input.checked);
+          localStorage.setItem(key, input.checked ? "1" : "0");
+        };
+        input.addEventListener("change", sync);
+        item.addEventListener("click", (event) => {
+          if (event.target === input) return;
+          input.checked = !input.checked;
+          sync();
+        });
+      });
+    }
+
+    function renderHabitsPlane(plan, date) {
+      const h = plan.habits;
+      const morning = h.morning.map((step, i) => renderMorningStep(step, i)).join("");
+      const checklist = h.checklist.map((line, i) => `
+        <li class="checklist__item">
+          <input type="checkbox" id="check-${i}" data-check-index="${i}" aria-label="${escapeHtml(line)}"/>
+          <label class="checklist__label" for="check-${i}">${escapeHtml(line)}</label>
+        </li>
+      `).join("");
+      return `
+        <section class="plane" aria-labelledby="habits-title">
+          <div class="plane__head">
+            <h2 class="plane__title" id="habits-title">Daily brief</h2>
+            <p class="plane__hint">Week ${plan.week} · ${escapeHtml(plan.phase.phase)}</p>
+          </div>
+          <div class="cue">
+            <p class="cue__label">Morning routine</p>
+            <p class="cue__body">${h.morning.length} steps before the day starts — ~15 min on weekdays.</p>
+            <ol class="routine" aria-label="Morning routine steps">${morning}</ol>
+          </div>
+          <div class="habit-grid">
+            <div class="habit-row habit-row--water">
+              <p class="habit-row__label">Water</p>
+              <p class="habit-row__body">${escapeHtml(h.water)}</p>
+            </div>
+            <div class="habit-row habit-row--sleep">
+              <p class="habit-row__label">Sleep</p>
+              <p class="habit-row__body">${escapeHtml(h.sleep)}</p>
+            </div>
+            <div class="habit-row habit-row--smoking">
+              <p class="habit-row__label">Smoking</p>
+              <p class="habit-row__body">${escapeHtml(h.smoking)}</p>
+            </div>
+            <div class="habit-row habit-row--alcohol">
+              <p class="habit-row__label">Alcohol</p>
+              <p class="habit-row__body">${escapeHtml(h.alcohol)}</p>
+            </div>
+          </div>
+          <p class="cue__label" style="margin-top: var(--space-4)">Daily checklist</p>
+          <ul class="checklist">${checklist}</ul>
+        </section>
+      `;
     }
 
     function dateForJsDay(jsDay) {
@@ -1819,17 +2222,15 @@
       `).join("");
 
       return `
-        <div class="recipe-hero">
-          <img class="recipe-hero__img" src="${escapeHtml(recipe.image)}" alt="${escapeHtml(recipe.title)}" width="800" height="500"/>
-          <div class="recipe-hero__fade" aria-hidden="true"></div>
-          <div class="recipe-hero__caption">
-            <p class="recipe-hero__slot">${escapeHtml(meal.slot)}</p>
-            <h2 class="recipe-hero__title" id="recipe-dialog-title">${escapeHtml(multi ? recipe.title : meal.dish)}</h2>
+        <div class="recipe-dialog__sticky">
+          <div class="recipe-hero">
+            <img class="recipe-hero__img" src="${escapeHtml(recipe.image)}" alt="${escapeHtml(recipe.title)}" width="800" height="500"/>
+            <div class="recipe-hero__fade" aria-hidden="true"></div>
+            <div class="recipe-hero__caption">
+              <p class="recipe-hero__slot">${escapeHtml(meal.slot)}</p>
+              <h2 class="recipe-hero__title" id="recipe-dialog-title">${escapeHtml(multi ? recipe.title : meal.dish)}</h2>
+            </div>
           </div>
-        </div>
-        <div class="recipe-sheet">
-          ${meal.recipeNote ? `<p class="recipe-note">${escapeHtml(meal.recipeNote)}</p>` : ""}
-          ${switcher}
           <div class="recipe-stats" aria-label="Recipe overview">
             <div class="recipe-stat">
               <span class="recipe-stat__value">${recipe.serves}</span>
@@ -1848,6 +2249,10 @@
               <span class="recipe-stat__label">Protein</span>
             </div>
           </div>
+        </div>
+        <div class="recipe-dialog__body">
+          ${meal.recipeNote ? `<p class="recipe-note">${escapeHtml(meal.recipeNote)}</p>` : ""}
+          ${switcher}
           <div class="recipe-macros" aria-label="Macros">
             <div class="recipe-macro">
               <span class="recipe-macro__label">Protein</span>
@@ -1894,13 +2299,13 @@
 
       if (!reducedMotion && animate) {
         const hero = recipeDialogBody.querySelector(".recipe-hero");
-        const sheet = recipeDialogBody.querySelector(".recipe-sheet");
+        const sheet = recipeDialogBody.querySelector(".recipe-dialog__body");
         if (hero) {
           animate(hero, { opacity: [0.4, 1], scale: [1.04, 1] }, { duration: 0.38, easing: EASE });
         }
         if (sheet) {
           motionIn(
-            sheet.querySelectorAll(".recipe-stat, .recipe-macro, .recipe-section__title, .recipe-ingredient, .recipe-step, .recipe-tip, .recipe-switch"),
+            sheet.querySelectorAll(".recipe-macro, .recipe-section__title, .recipe-ingredient, .recipe-step, .recipe-tip, .recipe-switch"),
             { opacity: [0, 1], y: [12, 0] },
             { delay: delayStagger(0.035), duration: 0.28, easing: EASE },
           );
@@ -1945,31 +2350,9 @@
       renderContextStrip(plan);
       const root = document.getElementById("today-root");
 
-      if (plan.rest) {
-        root.innerHTML = `
-          <section class="plane" aria-labelledby="meals-title">
-            <div class="plane__head">
-              <h2 class="plane__title" id="meals-title">Meals</h2>
-              <p class="plane__hint">Cold tips</p>
-            </div>
-            <p class="rest">Weekend flex. Repeat any two favorite weekdays, or mix from leftovers.<span class="rest__sub">No leads</span></p>
-            <p class="note">Daily target still ${escapeHtml(PROFILE.dailyTargetKcal)} kcal with ${escapeHtml(PROFILE.shake)}.</p>
-            <ul class="gerd-list">${PROFILE.gerdRules.map((r) => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
-          </section>
-          <section class="plane" aria-labelledby="train-title">
-            <div class="plane__head">
-              <h2 class="plane__title" id="train-title">Training</h2>
-              <p class="plane__hint">Recovery</p>
-            </div>
-            <p class="rest">Rest day. Optional easy walk.<span class="rest__sub">No leads</span></p>
-            <p class="note note--quiet"><strong>Every day</strong> ${escapeHtml(PROFILE.steps)}.</p>
-          </section>
-        `;
-        return;
-      }
-
       const meal = plan.meal;
       const workout = plan.workout;
+      if (!meal || !workout) return;
 
       const mealCards = meal.meals.map((item, i) => `
         <li>
@@ -2037,7 +2420,12 @@
         `;
       }
 
+      const trainHint = workout.recovery
+        ? (plan.isWeekend ? "Recovery dossier" : "Active recovery")
+        : `${workout.exercises.length} suspects`;
+
       root.innerHTML = `
+        ${renderHabitsPlane(plan, dateForJsDay(selectedJsDay))}
         <section class="plane" aria-labelledby="meals-title">
           <div class="plane__head">
             <h2 class="plane__title" id="meals-title">${escapeHtml(meal.label)} plate</h2>
@@ -2056,22 +2444,25 @@
             </div>
           </div>
           <ul class="meal-cards">${mealCards}</ul>
+          ${meal.cheatMeal ? `<p class="note"><strong>Cheat meal</strong> ${escapeHtml(meal.cheatMeal)}</p>` : ""}
           <p class="note">Includes ${escapeHtml(PROFILE.shake)}.</p>
           <ul class="gerd-list">${PROFILE.gerdRules.map((r) => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
         </section>
         <section class="plane" aria-labelledby="train-title">
           <div class="plane__head">
             <h2 class="plane__title" id="train-title">Day ${workout.day} · ${escapeHtml(workout.focus)}</h2>
-            <p class="plane__hint">${workout.exercises.length} suspects</p>
+            <p class="plane__hint">${trainHint}</p>
           </div>
           ${renderMobility(workout.warmUp, "Warm-up", "warmup-title")}
           <ul class="exercise-cards">${exerciseCards}</ul>
           ${renderMobility(workout.coolDown, "Cool-down", "cooldown-title")}
           ${workout.note ? `<p class="note">${escapeHtml(workout.note)}</p>` : ""}
+          ${plan.phase ? `<p class="note note--quiet"><strong>Phase</strong> ${escapeHtml(plan.phase.note)}</p>` : ""}
         </section>
       `;
 
       bindMealCards();
+      bindChecklist(root, dateForJsDay(selectedJsDay));
     }
 
     function animatePlanes(root) {
@@ -2196,11 +2587,24 @@
         dismissSplash();
       });
 
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("legacy/sw.js", { scope: "legacy/" }).catch(() => {});
-      });
+    async function migrateServiceWorkers() {
+      if (!("serviceWorker" in navigator)) return;
+      const migrated = sessionStorage.getItem("hm-sw-v20");
+      if (migrated) return;
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((reg) => reg.unregister()));
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.filter((k) => k.startsWith("health-map")).map((k) => caches.delete(k)));
+      }
+      sessionStorage.setItem("hm-sw-v20", "1");
     }
+
+    migrateServiceWorkers().finally(() => {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      }
+    });
   </script>
 </body>
 </html>

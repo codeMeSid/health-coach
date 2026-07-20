@@ -10,7 +10,7 @@ Solo user. Opens the page at home (kitchen counter or desk) under warm indoor li
 
 ## Product Purpose
 
-Health Map is a personal weekly meal and workout viewer. Vegetarian, egg-inclusive, GERD-friendly meals plus a 5-day workout plan. Success: today’s food and training visible in seconds, numbers readable at arm’s length, no chrome between user and plan.
+Health Map is a personal 180-day transformation viewer: weekly vegetarian meals, progressive gym split, and daily habits (sleep, smoking, alcohol, acidity). Success: today’s food, training, and field notes visible in seconds, numbers readable at arm’s length, no chrome between user and plan.
 
 ## Brand Personality
 
